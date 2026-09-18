@@ -141,18 +141,6 @@ The following features were planned for the website:
 - Consistent visual design.
 - Responsive website layout.
 
-Timeline
-
-Stage| Task
-Week 1| Plan the Luna Apparel website and structure
-Week 1| Create the HTML pages
-Week 2| Add images, products and content
-Week 2| Test navigation and fix errors
-Week 3/6| Finalise the website and prepare the submission
-Part 2| Add CSS styling and responsive design
-Part 2| Test the website on different screen sizes
-Part 2| Update README.md and prepare the GitHub submission
-
 References
 
 The following resources were used for guidance during the development of the website:
