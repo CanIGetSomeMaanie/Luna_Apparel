@@ -8,9 +8,7 @@
     <title>Product Enquiries | Luna Apparel South Africa</title>
 
     <meta name="description" content="Have a question about Luna Apparel clothing, dresses, tops, shoes or handbags? Submit a product enquiry and our team will assist you.">
-
     <meta name="keywords" content="Luna Apparel enquiries, product enquiries, women's fashion South Africa, clothing enquiries, fashion products">
-
     <meta name="author" content="Luna Apparel">
     <meta name="robots" content="index, follow">
 
@@ -19,12 +17,9 @@
 
 <body>
 
-    <!-- Main Navigation -->
     <header class="site-header">
         <nav class="navbar">
-
             <a href="index.html" class="logo">LUNA APPAREL</a>
-
             <div class="nav-links">
                 <a href="index.html">Home</a>
                 <a href="about.html">About Us</a>
@@ -32,68 +27,41 @@
                 <a href="enquiry.html">Enquiry</a>
                 <a href="contact.html">Contact</a>
             </div>
-
         </nav>
     </header>
 
     <main>
 
-        <!-- Product Enquiry Section -->
         <section>
 
             <h1>Product Enquiry</h1>
 
             <p>
                 Have a question about one of our products?
-                Complete the form below and our team will assist you
-                with product information, pricing and availability.
+                Complete the form below to get the price and availability straight away,
+                and our team will follow up on anything else.
             </p>
 
-            <!-- Enquiry Form -->
-            <form
-                id="enquiryForm"
-                action="https://formsubmit.co/ajax/imaanseegers1@gmail.com"
-                method="POST">
+            <form id="enquiryForm" novalidate>
 
                 <label for="name">Full Name:</label>
-
-                <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    minlength="2"
-                    required
-                    placeholder="Enter your full name">
+                <input type="text" id="name" name="name" placeholder="Enter your full name">
+                <span class="error-message" id="name-error"></span>
 
                 <label for="email">Email Address:</label>
-
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    placeholder="Enter your email address">
+                <input type="email" id="email" name="email" placeholder="Enter your email address">
+                <span class="error-message" id="email-error"></span>
 
                 <label for="product">Product:</label>
-
-                <input
-                    type="text"
-                    id="product"
-                    name="product"
-                    minlength="2"
-                    required
-                    placeholder="Enter the product name">
+                <select id="product" name="product">
+                    <option value="">Select a product</option>
+                </select>
+                <span class="error-message" id="product-error"></span>
 
                 <label for="message">Enquiry:</label>
-
-                <textarea
-                    id="message"
-                    name="message"
-                    rows="5"
-                    minlength="10"
-                    maxlength="1000"
-                    required
+                <textarea id="message" name="message" rows="5" maxlength="1000"
                     placeholder="Tell us what you would like to know..."></textarea>
+                <span class="error-message" id="message-error"></span>
 
                 <button type="submit">Submit Enquiry</button>
 
@@ -101,37 +69,27 @@
 
         </section>
 
-        <!-- Enquiry Confirmation Pop-up -->
-        <div class="enquiry-popup" id="enquiryPopup">
-
+        <div class="enquiry-popup" id="enquiryPopup" role="dialog" aria-modal="true">
             <div class="enquiry-popup-content">
-
                 <h2>Thank You!</h2>
-
-                <p id="popupMessage">
-                    Your enquiry has been received.
-                    Our team will get back to you soon.
-                </p>
-
-                <button type="button" id="closePopup">
-                    Continue Shopping
-                </button>
-
+                <p id="popupMessage">Your enquiry has been received. Our team will get back to you soon.</p>
+                <button type="button" id="closePopup">Continue Shopping</button>
             </div>
-
         </div>
 
     </main>
 
-    <!-- Footer -->
     <footer class="site-footer">
-
+        <p>
+            Follow us:
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a> |
+            <a href="https://www.facebook.com/" target="_blank" rel="noopener">Facebook</a>
+        </p>
         <p>&copy; 2026 Luna Apparel. All rights reserved.</p>
-
     </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
