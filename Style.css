@@ -873,6 +873,57 @@ footer p {
         flex-direction: column;
     }
 
+
+   /* =========================================
+   17. FORM POPUPS
+========================================= */
+
+#enquiryPopup,
+#contactPopup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background-color: rgba(0, 0, 0, 0.65);
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+/* Only show the popup when JavaScript adds the show class */
+
+#enquiryPopup.show,
+#contactPopup.show {
+    display: flex;
+}
+
+/* Popup content */
+
+#enquiryPopup > div,
+#contactPopup > div {
+    background-color: #fffaf5;
+    color: #3d302c;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    max-width: 30rem;
+    text-align: center;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+/* Popup buttons */
+
+#enquiryPopup button,
+#contactPopup button {
+    margin: 0.5rem;
+}
+
+/* Hide the lightbox until JavaScript creates it */
+
+.lightbox {
+    display: flex;
+}
+
     .product-controls input,
     .product-controls select {
         width: 100%;
