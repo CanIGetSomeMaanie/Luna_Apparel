@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://canigetsomemaanie.github.io/Luna_Apparel/sitemap.xml
