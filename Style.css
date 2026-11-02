@@ -1,425 +1,845 @@
-document.addEventListener("DOMContentLoaded", function () {
-
-    // =====================================
-    // 1. PRODUCT SEARCH, FILTERING AND SORTING
-    // =====================================
-
-    const intro = document.querySelector(".products-intro");
-
-    if (intro) {
-
-        const searchContainer = document.createElement("div");
-        searchContainer.className = "product-controls";
-
-        searchContainer.innerHTML = `
-            <input type="text" id="productSearch"
-            placeholder="Search for a product...">
-
-            <select id="categoryFilter">
-                <option value="all">All Categories</option>
-                <option value="dresses">Dresses</option>
-                <option value="tops">Tops</option>
-                <option value="shoes">Shoes</option>
-                <option value="handbags">Handbags</option>
-                <option value="skirts">Skirts</option>
-            </select>
-
-            <select id="priceSort">
-                <option value="default">Sort by price</option>
-                <option value="low">Price: Low to High</option>
-                <option value="high">Price: High to Low</option>
-            </select>
-        `;
-
-        intro.after(searchContainer);
-
-        const searchInput = document.getElementById("productSearch");
-        const categoryFilter = document.getElementById("categoryFilter");
-        const priceSort = document.getElementById("priceSort");
-
-        function filterProducts() {
-
-            const searchValue = searchInput.value.toLowerCase();
-            const selectedCategory = categoryFilter.value;
-
-            document.querySelectorAll(".product-category").forEach(section => {
-
-                const heading = section.querySelector("h2").textContent.toLowerCase();
-
-                const cards = Array.from(
-                    section.querySelectorAll(".product-card")
-                );
-
-                cards.forEach(card => {
-
-                    const name = card.querySelector("h3").textContent.toLowerCase();
-
-                    const matchesSearch = name.includes(searchValue);
-
-                    const matchesCategory =
-                        selectedCategory === "all" ||
-                        heading === selectedCategory;
-
-                    card.style.display =
-                        matchesSearch && matchesCategory ? "" : "none";
-                });
-
-                section.style.display =
-                    cards.some(card => card.style.display !== "none")
-                    ? "" : "none";
-
-                // Sort products by price
-
-                if (priceSort.value !== "default") {
-
-                    cards.sort((a, b) => {
-
-                        const priceA = parseFloat(
-                            a.querySelector(".price").textContent.replace("R", "")
-                        );
-
-                        const priceB = parseFloat(
-                            b.querySelector(".price").textContent.replace("R", "")
-                        );
-
-                        return priceSort.value === "low"
-                            ? priceA - priceB
-                            : priceB - priceA;
-                    });
-
-                    const grid = section.querySelector(".product-grid");
-
-                    cards.forEach(card => grid.appendChild(card));
-                }
-            });
-        }
-
-        searchInput.addEventListener("input", filterProducts);
-        categoryFilter.addEventListener("change", filterProducts);
-        priceSort.addEventListener("change", filterProducts);
+/* =========================================
+   LUNA APPAREL
+   COMPLETE STYLE SHEET - PART 3
+========================================= */
 
 
-        // =====================================
-        // 2. PRODUCT IMAGE LIGHTBOX
-        // =====================================
+/* =========================================
+   1. BASIC RESET
+========================================= */
 
-        document.querySelectorAll(".product-card img").forEach(img => {
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-            img.style.cursor = "pointer";
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
 
-            img.addEventListener("click", function () {
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #fffaf5;
+    color: #3d302c;
+    line-height: 1.6;
+}
 
-                const lightbox = document.createElement("div");
-                lightbox.className = "lightbox";
+img {
+    max-width: 100%;
+    display: block;
+}
 
-                lightbox.innerHTML = `
-                    <span class="lightbox-close">&times;</span>
-                    <img src="${img.src}" alt="${img.alt}">
-                `;
+a {
+    color: inherit;
+    text-decoration: none;
+}
 
-                document.body.appendChild(lightbox);
 
-                lightbox.addEventListener("click", function () {
-                    lightbox.remove();
-                });
+/* =========================================
+   2. NAVIGATION
+========================================= */
 
-                function closeWithEscape(event) {
+header {
+    background-color: #fffaf5;
+    border-bottom: 1px solid #eadbd2;
+    padding: 1.25rem 5%;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
 
-                    if (event.key === "Escape") {
-                        lightbox.remove();
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2.2rem;
+    flex-wrap: wrap;
+}
 
-                        document.removeEventListener(
-                            "keydown",
-                            closeWithEscape
-                        );
-                    }
-                }
+nav a {
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.0625rem;
+    text-transform: uppercase;
+    transition: color 0.3s ease;
+}
 
-                document.addEventListener("keydown", closeWithEscape);
-            });
-        });
+nav a:hover {
+    color: #c97968;
+}
+
+
+/* =========================================
+   3. GENERAL PAGE STYLING
+========================================= */
+
+main {
+    width: 90%;
+    max-width: 75rem;
+    margin: 0 auto;
+}
+
+section {
+    padding: 3.75rem 0;
+}
+
+h1,
+h2,
+h3 {
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.125rem;
+}
+
+p {
+    margin-bottom: 0.9375rem;
+}
+
+
+/* =========================================
+   4. BUTTONS
+========================================= */
+
+button {
+    border: none;
+    cursor: pointer;
+    margin-top: 1.25rem;
+    padding: 0.875rem 1.5625rem;
+    border-radius: 1.875rem;
+    background-color: #c97968;
+    color: white;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #9f5b4e;
+}
+
+button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+
+/* =========================================
+   5. HOME PAGE
+========================================= */
+
+.home-hero {
+    min-height: 33.75rem;
+    display: grid;
+    grid-template-columns: 1fr 0.8fr;
+    align-items: center;
+    gap: 3.125rem;
+    padding: 3.125rem 0;
+}
+
+.hero-content {
+    padding: 1.25rem;
+}
+
+.hero-small-text {
+    color: #c97968;
+    font-size: 0.8125rem;
+    font-weight: bold;
+    letter-spacing: 0.1875rem;
+    margin-bottom: 0.9375rem;
+}
+
+.hero-content h1 {
+    font-size: clamp(2.625rem, 5vw, 4.375rem);
+    margin-bottom: 1.5625rem;
+}
+
+.hero-content > p:not(.hero-small-text) {
+    max-width: 31.25rem;
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+}
+
+
+/* Home button */
+
+.hero-button {
+    margin-top: 0.625rem;
+    padding: 0.8125rem 1.6875rem;
+    background-color: #c97968;
+    color: white;
+    border-radius: 1.875rem;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.hero-button:hover {
+    background-color: #9f5b4e;
+    transform: translateY(-0.1875rem);
+}
+
+
+/* Home image */
+
+.hero-image {
+    width: 100%;
+    max-width: 24.375rem;
+    height: 29.375rem;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 0.5rem;
+}
+
+.hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+
+/* Featured section */
+
+.featured-section {
+    text-align: center;
+    padding: 3.125rem 0 5rem;
+}
+
+.featured-section h2 {
+    margin-bottom: 0.9375rem;
+}
+
+.featured-section p {
+    max-width: 40.625rem;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+
+/* =========================================
+   6. PRODUCTS PAGE
+========================================= */
+
+.products-page {
+    width: 92%;
+    max-width: 78.125rem;
+    margin: 0 auto;
+    padding: 1.25rem 0 5rem;
+}
+
+.products-intro {
+    text-align: center;
+    padding: 2.8125rem 0 3.75rem;
+}
+
+.products-intro h1 {
+    font-size: 2.75rem;
+    margin-bottom: 0.9375rem;
+}
+
+.products-intro p {
+    max-width: 40.625rem;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+
+/* Product categories */
+
+.product-category {
+    padding: 0;
+    margin-bottom: 8.75rem;
+}
+
+.product-category h2 {
+    text-align: center;
+    font-size: 1.875rem;
+    margin-bottom: 2.1875rem;
+}
+
+
+/* Product grid */
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.375rem;
+}
+
+
+/* Product cards */
+
+.product-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.07);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-0.3125rem);
+    box-shadow: 0 0.4375rem 1.125rem rgba(0, 0, 0, 0.12);
+}
+
+
+/* Product images */
+
+.product-card img {
+    width: 100%;
+    height: 28.125rem;
+    object-fit: contain;
+    object-position: center center;
+    background-color: #fffaf5;
+    display: block;
+    padding: 0.3125rem;
+    transition: transform 0.3s ease;
+}
+
+.product-card img:hover {
+    transform: scale(1.04);
+}
+
+
+/* Product information */
+
+.product-info {
+    padding: 0.9375rem;
+    min-height: 6.25rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-info h3 {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0;
+}
+
+.product-info .price {
+    margin-top: auto;
+    margin-bottom: 0;
+    padding-top: 0.625rem;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+
+/* Product search and filters */
+
+.product-controls {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 30px auto;
+    padding: 15px;
+}
+
+.product-controls input,
+.product-controls select {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 15px;
+    background-color: white;
+}
+
+.product-controls input {
+    min-width: 220px;
+}
+
+
+/* =========================================
+   7. FORMS
+========================================= */
+
+form {
+    max-width: 40.625rem;
+    margin-top: 1.875rem;
+}
+
+label {
+    display: block;
+    margin-top: 0.9375rem;
+    margin-bottom: 0.3125rem;
+    font-weight: 600;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 0.875rem;
+    border: 1px solid #d8c6bd;
+    border-radius: 0.375rem;
+    background-color: white;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid #c97968;
+    border-color: #c97968;
+}
+
+textarea {
+    resize: vertical;
+}
+
+
+/* =========================================
+   8. CONTACT PAGE
+========================================= */
+
+.contact-page {
+    padding-bottom: 2rem;
+}
+
+.contact-intro {
+    text-align: center;
+    padding: 3rem 0 2rem;
+}
+
+.contact-intro h1 {
+    margin-bottom: 0.75rem;
+}
+
+.contact-intro p {
+    max-width: 40rem;
+    margin: 0 auto;
+}
+
+.contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    padding: 1rem 0 2.5rem;
+}
+
+.contact-details,
+.contact-form-section {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.06);
+}
+
+.contact-details h2,
+.contact-form-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.contact-details h3 {
+    font-size: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.contact-details p {
+    margin-bottom: 0.5rem;
+}
+
+.contact-form-section form {
+    margin-top: 0;
+    max-width: none;
+}
+
+.location-section {
+    padding: 1rem 0 3rem;
+}
+
+.location-section h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.location-section iframe {
+    display: block;
+    border-radius: 0.5rem;
+}
+
+
+/* =========================================
+   9. CONFIRMATION POPUPS
+========================================= */
+
+/* Hide both popups when the page first loads */
+
+#enquiryPopup,
+#contactPopup {
+    display: none !important;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background-color: rgba(0, 0, 0, 0.65);
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+/* JavaScript adds the show class after successful submission */
+
+#enquiryPopup.show,
+#contactPopup.show {
+    display: flex !important;
+}
+
+/* Popup content */
+
+#enquiryPopup .enquiry-popup-content,
+#contactPopup .contact-popup-content {
+    background-color: #fffaf5;
+    color: #3d302c;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    max-width: 30rem;
+    text-align: center;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.2);
+}
+
+#enquiryPopup h2,
+#contactPopup h2 {
+    margin-bottom: 1rem;
+}
+
+#enquiryPopup p,
+#contactPopup p {
+    line-height: 1.7;
+}
+
+/* Contact email preview */
+
+#contactPopup textarea {
+    width: 100%;
+    min-height: 150px;
+    margin-top: 1rem;
+    border: 1px solid #d8c6bd;
+    border-radius: 0.375rem;
+    padding: 0.75rem;
+    background-color: white;
+    color: #3d302c;
+    resize: vertical;
+}
+
+/* Popup links and buttons */
+
+#contactPopup a {
+    display: inline-block;
+    margin: 0.75rem;
+    color: #9f5b4e;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+
+/* =========================================
+   10. PRODUCT IMAGE LIGHTBOX
+========================================= */
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 30px;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 85vh;
+    object-fit: contain;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    cursor: pointer;
+}
+
+
+/* =========================================
+   11. FOOTER
+========================================= */
+
+footer {
+    margin-top: 1.25rem;
+    padding: 1.875rem 5%;
+    background-color: #3d302c;
+    color: #fffaf5;
+    text-align: center;
+}
+
+footer p {
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   12. TABLET RESPONSIVENESS
+========================================= */
+
+@media (max-width: 56.25rem) {
+
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
 
+}
 
-    // =====================================
-    // 3. FUNCTION TO SEND FORM EMAILS
-    // =====================================
 
-    async function sendForm(form, formData) {
+/* =========================================
+   13. SMALL TABLET RESPONSIVENESS
+========================================= */
 
-        const response = await fetch(form.action, {
-            method: "POST",
+@media (max-width: 48rem) {
 
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-
-            body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-
-        if (
-            !response.ok ||
-            String(result.success).toLowerCase() !== "true"
-        ) {
-            throw new Error("The message could not be sent.");
-        }
-
-        return result;
+    header {
+        padding: 1rem 4%;
     }
 
-
-    // =====================================
-    // 4. ENQUIRY FORM
-    // =====================================
-
-    const enquiryForm = document.getElementById("enquiryForm");
-    const enquiryPopup = document.getElementById("enquiryPopup");
-    const popupMessage = document.getElementById("popupMessage");
-    const closePopup = document.getElementById("closePopup");
-
-    if (enquiryForm && enquiryPopup) {
-
-        enquiryForm.addEventListener("submit", async function (event) {
-
-            event.preventDefault();
-
-            if (!enquiryForm.reportValidity()) {
-                return;
-            }
-
-            const name = document.getElementById("name").value.trim();
-            const email = document.getElementById("email").value.trim();
-            const product = document.getElementById("product").value.trim();
-            const message = document.getElementById("message").value.trim();
-
-            const submitButton = enquiryForm.querySelector(
-                'button[type="submit"]'
-            );
-
-            if (submitButton) {
-                submitButton.disabled = true;
-                submitButton.textContent = "Sending...";
-            }
-
-            try {
-
-                await sendForm(enquiryForm, {
-                    name: name,
-                    email: email,
-                    product: product,
-                    message: message,
-                    _subject: "New Luna Apparel Product Enquiry"
-                });
-
-                popupMessage.textContent =
-                    "Thank you, " + name +
-                    "! Your enquiry about " + product +
-                    " has been sent successfully. Our team will get back to you with information about pricing and availability.";
-
-                enquiryPopup.classList.add("show");
-
-                enquiryForm.reset();
-
-            } catch (error) {
-
-                console.error("Enquiry form error:", error);
-
-                alert(
-                    "Your enquiry could not be sent. Please try again."
-                );
-
-            } finally {
-
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.textContent = "Submit Enquiry";
-                }
-            }
-        });
-
-        if (closePopup) {
-
-            closePopup.addEventListener("click", function () {
-                enquiryPopup.classList.remove("show");
-            });
-        }
-
-        enquiryPopup.addEventListener("click", function (event) {
-
-            if (event.target === enquiryPopup) {
-                enquiryPopup.classList.remove("show");
-            }
-        });
+    nav {
+        gap: 0.75rem 1.25rem;
     }
 
-
-    // =====================================
-    // 5. CONTACT FORM
-    // =====================================
-
-    const contactForm = document.getElementById("contactForm");
-    const contactPopup = document.getElementById("contactPopup");
-
-    if (contactForm && contactPopup) {
-
-        const emailPreview = document.getElementById("emailPreview");
-        const copyEmail = document.getElementById("copyEmail");
-        const openEmail = document.getElementById("openEmail");
-        const closeContactPopup = document.getElementById("closeContactPopup");
-
-        contactForm.addEventListener("submit", async function (event) {
-
-            event.preventDefault();
-
-            if (!contactForm.reportValidity()) {
-                return;
-            }
-
-            const name = document.getElementById("contact-name").value.trim();
-            const email = document.getElementById("contact-email").value.trim();
-            const messageType = document.getElementById("message-type").value;
-            const message = document.getElementById("contact-message").value.trim();
-
-            if (name.length < 2) {
-                alert("Please enter your full name.");
-                return;
-            }
-
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                alert("Please enter a valid email address.");
-                return;
-            }
-
-            if (messageType === "") {
-                alert("Please select a message type.");
-                return;
-            }
-
-            if (message.length < 10) {
-                alert("Your message must contain at least 10 characters.");
-                return;
-            }
-
-            const submitButton = contactForm.querySelector(
-                'button[type="submit"]'
-            );
-
-            if (submitButton) {
-                submitButton.disabled = true;
-                submitButton.textContent = "Sending...";
-            }
-
-            const emailSubject = "Luna Apparel - " + messageType;
-
-            const emailBody =
-                "Name: " + name + "\n" +
-                "Email: " + email + "\n" +
-                "Message Type: " + messageType + "\n\n" +
-                "Message:\n" + message;
-
-            try {
-
-                await sendForm(contactForm, {
-                    name: name,
-                    email: email,
-                    message_type: messageType,
-                    message: message,
-                    _subject: emailSubject
-                });
-
-                // Prepare a copy of the submitted message
-
-                if (emailPreview) {
-
-                    emailPreview.value =
-                        "To: imaanseegers1@gmail.com\n\n" +
-                        "Subject: " + emailSubject + "\n\n" +
-                        emailBody;
-                }
-
-                if (openEmail) {
-
-                    openEmail.href =
-                        "mailto:imaanseegers1@gmail.com" +
-                        "?subject=" + encodeURIComponent(emailSubject) +
-                        "&body=" + encodeURIComponent(emailBody);
-                }
-
-                // Show confirmation only after successful submission
-
-                contactPopup.classList.add("show");
-
-                contactForm.reset();
-
-            } catch (error) {
-
-                console.error("Contact form error:", error);
-
-                alert(
-                    "Your message could not be sent. Please try again."
-                );
-
-            } finally {
-
-                if (submitButton) {
-                    submitButton.disabled = false;
-                    submitButton.textContent = "Send Message";
-                }
-            }
-        });
-
-
-        // =====================================
-        // 6. COPY CONTACT MESSAGE
-        // =====================================
-
-        if (copyEmail && emailPreview) {
-
-            copyEmail.addEventListener("click", async function () {
-
-                try {
-
-                    await navigator.clipboard.writeText(emailPreview.value);
-
-                    alert("Your message has been copied successfully.");
-
-                } catch (error) {
-
-                    emailPreview.select();
-                    emailPreview.setSelectionRange(0, 99999);
-
-                    const copied = document.execCommand("copy");
-
-                    if (copied) {
-                        alert("Your message has been copied successfully.");
-                    } else {
-                        alert("Please select and copy your message manually.");
-                    }
-                }
-            });
-        }
-
-
-        // =====================================
-        // 7. CLOSE CONTACT POP-UP
-        // =====================================
-
-        if (closeContactPopup) {
-
-            closeContactPopup.addEventListener("click", function () {
-                contactPopup.classList.remove("show");
-            });
-        }
-
-        contactPopup.addEventListener("click", function (event) {
-
-            if (event.target === contactPopup) {
-                contactPopup.classList.remove("show");
-            }
-        });
+    nav a {
+        font-size: 0.75rem;
     }
 
-});
+    main {
+        width: 92%;
+    }
+
+    /* Home */
+
+    .home-hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1.875rem;
+        padding: 2.1875rem 0;
+    }
+
+    .hero-content {
+        padding: 0.625rem;
+    }
+
+    .hero-content > p:not(.hero-small-text) {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-image {
+        width: 75%;
+        height: 26.25rem;
+    }
+
+    /* Products */
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .product-category {
+        margin-bottom: 6.875rem;
+    }
+
+    /* Contact */
+
+    .contact-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .contact-details,
+    .contact-form-section {
+        padding: 1.5rem;
+    }
+
+}
+
+
+/* =========================================
+   14. MOBILE RESPONSIVENESS
+========================================= */
+
+@media (max-width: 30rem) {
+
+    header {
+        padding: 0.875rem 4%;
+    }
+
+    nav {
+        gap: 0.5rem 0.9375rem;
+    }
+
+    nav a {
+        font-size: 0.6875rem;
+    }
+
+    /* General */
+
+    section {
+        padding: 2.5rem 0;
+    }
+
+    h1 {
+        font-size: 2.375rem;
+    }
+
+    h2 {
+        font-size: 1.6875rem;
+    }
+
+    /* Home */
+
+    .home-hero {
+        padding: 1.5625rem 0;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-image {
+        width: 85%;
+        height: 23.75rem;
+    }
+
+    /* Products */
+
+    .products-page {
+        width: 92%;
+    }
+
+    .products-intro {
+        padding: 2.1875rem 0 2.8125rem;
+    }
+
+    .products-intro h1 {
+        font-size: 2.125rem;
+    }
+
+    .product-category {
+        margin-bottom: 5.625rem;
+    }
+
+    .product-category h2 {
+        font-size: 1.6875rem;
+        margin-bottom: 1.5625rem;
+    }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .product-card img {
+        width: 100%;
+        height: 28.125rem;
+        object-fit: contain;
+        object-position: center center;
+        padding: 0.3125rem;
+    }
+
+    .product-info {
+        padding: 0.75rem;
+        min-height: 5.625rem;
+    }
+
+    .product-info h3 {
+        font-size: 0.875rem;
+    }
+
+    .product-info .price {
+        font-size: 0.9375rem;
+    }
+
+    /* Product controls */
+
+    .product-controls {
+        flex-direction: column;
+    }
+
+    .product-controls input,
+    .product-controls select {
+        width: 100%;
+        min-width: 0;
+    }
+
+    /* Contact */
+
+    .contact-intro {
+        padding: 2rem 0 1.5rem;
+    }
+
+    .contact-intro h1 {
+        font-size: 2.25rem;
+    }
+
+    .contact-layout {
+        padding-bottom: 1rem;
+    }
+
+    .location-section iframe {
+        height: 240px;
+    }
+
+    /* Forms */
+
+    input,
+    textarea,
+    select {
+        font-size: 1rem;
+    }
+
+    /* Popups */
+
+    #enquiryPopup .enquiry-popup-content,
+    #contactPopup .contact-popup-content {
+        padding: 1.5rem;
+    }
+
+    /* Lightbox */
+
+    .lightbox {
+        padding: 15px;
+    }
+
+    .lightbox img {
+        max-width: 100%;
+        max-height: 80vh;
+    }
+
+    .lightbox-close {
+        top: 10px;
+        right: 20px;
+    }
+
+}
