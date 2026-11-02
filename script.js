@@ -1,6 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     // =====================================
+    // EMAILJS SETTINGS
+    // =====================================
+
+    const SERVICE_ID = "luna_apparel_gmail";
+    const BUSINESS_TEMPLATE_ID = "template_naqshqt";
+    const CUSTOMER_TEMPLATE_ID = "template_hcc0aqs";
+    const PUBLIC_KEY = "OLj_2BI_Yj8VaZJkP";
+
+    // =====================================
     // 1. PRODUCT SEARCH, FILTERING AND SORTING
     // =====================================
 
@@ -68,8 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     cards.some(card => card.style.display !== "none")
                     ? "" : "none";
 
-                // Sort products by price
-
                 if (priceSort.value !== "default") {
 
                     cards.sort((a, b) => {
@@ -98,7 +105,6 @@ document.addEventListener("DOMContentLoaded", function () {
         categoryFilter.addEventListener("change", filterProducts);
         priceSort.addEventListener("change", filterProducts);
 
-
         // =====================================
         // 2. PRODUCT IMAGE LIGHTBOX
         // =====================================
@@ -119,57 +125,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 document.body.appendChild(lightbox);
 
-                lightbox.addEventListener("click", function () {
+                function closeLightbox() {
                     lightbox.remove();
-                });
+                    document.removeEventListener("keydown", closeWithEscape);
+                }
 
                 function closeWithEscape(event) {
-
                     if (event.key === "Escape") {
-                        lightbox.remove();
-
-                        document.removeEventListener(
-                            "keydown",
-                            closeWithEscape
-                        );
+                        closeLightbox();
                     }
                 }
 
+                lightbox.addEventListener("click", closeLightbox);
                 document.addEventListener("keydown", closeWithEscape);
             });
         });
     }
 
-
     // =====================================
-    // 3. FUNCTION TO SEND FORM EMAILS
+    // 3. SEND EMAILS USING EMAILJS
     // =====================================
 
-    async function sendForm(form, formData) {
+    async function sendEmails(formData) {
 
-        const response = await fetch(form.action, {
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-
-            body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-
-        if (
-            !response.ok ||
-            String(result.success).toLowerCase() !== "true"
-        ) {
-            throw new Error("The message could not be sent.");
+        if (typeof emailjs === "undefined") {
+            throw new Error("EmailJS has not loaded. Please refresh the page.");
         }
 
-        return result;
-    }
+        // Send the business notification first.
+        await emailjs.send(
+            SERVICE_ID,
+            BUSINESS_TEMPLATE_ID,
+            formData,
+            { publicKey: PUBLIC_KEY }
+        );
 
+        // EmailJS allows one request per second.
+        // Wait before sending the customer confirmation.
+        await new Promise(resolve => setTimeout(resolve, 1100));
+
+        // Send the customer confirmation.
+        // If this fails, the business notification has still been sent.
+        try {
+
+            await emailjs.send(
+                SERVICE_ID,
+                CUSTOMER_TEMPLATE_ID,
+                formData,
+                { publicKey: PUBLIC_KEY }
+            );
+
+            return true;
+
+        } catch (error) {
+
+            console.error("Customer confirmation email error:", error);
+            return false;
+        }
+    }
 
     // =====================================
     // 4. ENQUIRY FORM
@@ -186,9 +199,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             event.preventDefault();
 
-            if (!enquiryForm.reportValidity()) {
-                return;
-            }
+            if (!enquiryForm.reportValidity()) return;
 
             const name = document.getElementById("name").value.trim();
             const email = document.getElementById("email").value.trim();
@@ -206,21 +217,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
             try {
 
-                await sendForm(enquiryForm, {
+                const confirmationSent = await sendEmails({
                     name: name,
                     email: email,
                     product: product,
-                    message: message,
-                    _subject: "New Luna Apparel Product Enquiry"
+                    message_type: "Product enquiry",
+                    subject: "New Luna Apparel Product Enquiry",
+                    message: message
                 });
 
                 popupMessage.textContent =
                     "Thank you, " + name +
                     "! Your enquiry about " + product +
-                    " has been sent successfully. Our team will get back to you with information about pricing and availability.";
+                    " has been sent successfully. Our team will get back to you with information about pricing and availability." +
+                    (confirmationSent
+                        ? " A confirmation email has also been sent to you."
+                        : " Your enquiry was received, but we could not send your confirmation email.");
 
                 enquiryPopup.classList.add("show");
-
                 enquiryForm.reset();
 
             } catch (error) {
@@ -241,20 +255,17 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (closePopup) {
-
             closePopup.addEventListener("click", function () {
                 enquiryPopup.classList.remove("show");
             });
         }
 
         enquiryPopup.addEventListener("click", function (event) {
-
             if (event.target === enquiryPopup) {
                 enquiryPopup.classList.remove("show");
             }
         });
     }
-
 
     // =====================================
     // 5. CONTACT FORM
@@ -274,9 +285,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             event.preventDefault();
 
-            if (!contactForm.reportValidity()) {
-                return;
-            }
+            if (!contactForm.reportValidity()) return;
 
             const name = document.getElementById("contact-name").value.trim();
             const email = document.getElementById("contact-email").value.trim();
@@ -322,18 +331,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
             try {
 
-                await sendForm(contactForm, {
+                const confirmationSent = await sendEmails({
                     name: name,
                     email: email,
+                    product: "",
                     message_type: messageType,
-                    message: message,
-                    _subject: emailSubject
+                    subject: emailSubject,
+                    message: message
                 });
 
-                // Prepare a copy of the submitted message
-
                 if (emailPreview) {
-
                     emailPreview.value =
                         "To: imaanseegers1@gmail.com\n\n" +
                         "Subject: " + emailSubject + "\n\n" +
@@ -341,18 +348,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 if (openEmail) {
-
                     openEmail.href =
                         "mailto:imaanseegers1@gmail.com" +
                         "?subject=" + encodeURIComponent(emailSubject) +
                         "&body=" + encodeURIComponent(emailBody);
                 }
 
-                // Show confirmation only after successful submission
-
                 contactPopup.classList.add("show");
 
                 contactForm.reset();
+
+                if (!confirmationSent) {
+                    alert(
+                        "Your message was sent to Luna Apparel, but the customer confirmation email could not be sent."
+                    );
+                }
 
             } catch (error) {
 
@@ -371,7 +381,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
 
-
         // =====================================
         // 6. COPY CONTACT MESSAGE
         // =====================================
@@ -383,7 +392,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 try {
 
                     await navigator.clipboard.writeText(emailPreview.value);
-
                     alert("Your message has been copied successfully.");
 
                 } catch (error) {
@@ -393,29 +401,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     const copied = document.execCommand("copy");
 
-                    if (copied) {
-                        alert("Your message has been copied successfully.");
-                    } else {
-                        alert("Please select and copy your message manually.");
-                    }
+                    alert(
+                        copied
+                            ? "Your message has been copied successfully."
+                            : "Please select and copy your message manually."
+                    );
                 }
             });
         }
 
-
         // =====================================
-        // 7. CLOSE CONTACT POP-UP
+        // 7. CLOSE CONTACT POPUP
         // =====================================
 
         if (closeContactPopup) {
-
             closeContactPopup.addEventListener("click", function () {
                 contactPopup.classList.remove("show");
             });
         }
 
         contactPopup.addEventListener("click", function (event) {
-
             if (event.target === contactPopup) {
                 contactPopup.classList.remove("show");
             }
