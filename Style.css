@@ -944,3 +944,99 @@ textarea.invalid {
 footer a {
     text-decoration: underline;
 }
+
+/* ===== NEAT, EQUAL-SIZE HOMEPAGE PICTURES ===== */
+
+/* Hero picture */
+.hero {
+    grid-template-columns: 1fr 1fr !important;
+    align-items: center !important;
+}
+
+.hero-image {
+    width: 100% !important;
+    max-width: 22rem !important;
+    height: auto !important;
+    aspect-ratio: 3 / 4 !important;
+    margin: 0 auto !important;
+    overflow: hidden !important;
+    border-radius: 0.5rem !important;
+}
+
+.hero-image img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+}
+
+/* Category cards: all square */
+.category-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1.2rem !important;
+}
+
+.category-card img {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+}
+
+/* Featured products: all the same size */
+.featured .product-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 1.2rem !important;
+}
+
+.featured .product-card img {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 3 / 4 !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    padding: 0 !important;
+}
+
+/* Brand story picture */
+.brand-story {
+    grid-template-columns: 1fr 1fr !important;
+}
+
+.brand-story-image img {
+    width: 100% !important;
+    max-width: 24rem !important;
+    height: auto !important;
+    aspect-ratio: 4 / 5 !important;
+    object-fit: cover !important;
+    object-position: center top !important;
+    margin: 0 auto !important;
+    border-radius: 0.5rem !important;
+}
+
+/* Tablet */
+@media (max-width: 56.25rem) {
+    .category-grid,
+    .featured .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+/* Small tablet and phone */
+@media (max-width: 48rem) {
+    .hero,
+    .brand-story {
+        grid-template-columns: 1fr !important;
+    }
+
+    .hero-image {
+        max-width: 18rem !important;
+    }
+
+    .brand-story-image img {
+        max-width: 20rem !important;
+    }
+}
