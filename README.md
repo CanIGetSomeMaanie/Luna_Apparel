@@ -1,14 +1,14 @@
-Luna Apparel
+# Luna Apparel
 
 A fashion website showcasing women's clothing, footwear and accessories.
 
-Project Overview
+## Project Overview
 
 Luna Apparel is a fashion website designed to showcase clothing products in a simple, attractive and user-friendly way. The website provides visitors with information about the brand, allows them to browse products and provides enquiry and contact forms.
 
 The project was developed in stages using HTML, CSS and JavaScript.
 
-Goals
+## Goals
 
 The main goals of the Luna Apparel website are to:
 
@@ -21,27 +21,30 @@ The main goals of the Luna Apparel website are to:
 - Improve the website's search engine optimisation (SEO).
 - Add interactive features to improve user experience.
 
-Technologies Used
+## Technologies Used
 
 - HTML5
 - CSS3
 - JavaScript
+- Leaflet (interactive map library)
+- OpenStreetMap (map data)
+- EmailJS (form email sending)
 - GitHub
 - Visual Studio Code
 - Live Preview
 - GitHub Pages
 
-Website Pages
+## Website Pages
 
 The website consists of the following pages:
 
-1. Home ("index.html")
-2. About Us ("about.html")
-3. Products ("products.html")
-4. Enquiries ("enquiry.html")
-5. Contact ("contact.html")
+1. Home (`index.html`)
+2. About Us (`about.html`)
+3. Products (`products.html`)
+4. Enquiries (`enquiry.html`)
+5. Contact (`contact.html`)
 
-Website Structure
+## Website Structure
 
 - Home
   - About Us
@@ -49,7 +52,7 @@ Website Structure
   - Enquiries
   - Contact
 
-Part 1 Features
+## Part 1 Features
 
 - Created the initial HTML structure.
 - Created the Home, About Us, Products, Enquiries and Contact pages.
@@ -57,9 +60,9 @@ Part 1 Features
 - Added product information, images and prices.
 - Added basic enquiry and contact forms.
 
-Part 2 Features
+## Part 2 Features
 
-CSS Styling
+### CSS Styling
 
 CSS was added to improve the appearance of the website. This includes:
 
@@ -73,21 +76,21 @@ CSS was added to improve the appearance of the website. This includes:
 - Form styling.
 - Consistent styling across all pages.
 
-Layout
+### Layout
 
 CSS Flexbox and Grid were used to organise content and create structured layouts.
 
-Responsive Design
+### Responsive Design
 
 Media queries and responsive CSS units were used to help the website adjust to different screen sizes, including desktop, tablet and mobile devices.
 
-Testing
+### Testing
 
 The website was tested using Visual Studio Code and Live Preview. Different browser window sizes were used to check navigation, images, links, forms and page layouts.
 
-Part 3 Features
+## Part 3 Features
 
-Interactive Features
+### Interactive Features
 
 JavaScript was added to improve website functionality and user interaction.
 
@@ -97,19 +100,19 @@ The features include:
 - Product category filtering.
 - Product price sorting.
 - Product image lightbox for viewing larger images.
-- Enquiry form validation and confirmation pop-up.
-- Contact form validation.
-- Contact form email preparation, including an option to copy the message or open an email application.
+- FAQ accordion on the About Us page.
+- Confirmation pop-ups for the Enquiry and Contact forms.
+- CSS animations and hover transitions on product cards.
 
-Dynamic Content
+### Dynamic Content
 
-JavaScript is used to filter and sort the displayed products according to the visitor's search and selected preferences.
+Products are loaded dynamically with JavaScript from a product list stored in `script.js`. The same list is used for the search, filtering and sorting, for the stock status labels on the Products page, and for the product dropdown on the Enquiry form.
 
-Interactive Map
+### Interactive Map
 
-A Google Maps embed was added to the Contact page to help visitors locate the business's area in Cape Town.
+An interactive map was added to the Contact page using the Leaflet library and OpenStreetMap data. It shows markers for the Sea Point (Cape Town) and Johannesburg stores.
 
-Search Engine Optimisation (SEO)
+### Search Engine Optimisation (SEO)
 
 SEO improvements were made across the website.
 
@@ -123,36 +126,42 @@ These include:
 - Correct heading structure.
 - Internal navigation links.
 - Mobile viewport settings.
-- A "robots.txt" file.
-- A "sitemap.xml" file listing the website pages.
+- Social media links in the footer (off-page SEO).
+- Local business structured data (JSON-LD) on the Contact page for local SEO.
+- A `robots.txt` file.
+- A `sitemap.xml` file listing the website pages.
 
-Forms
+### Forms
 
-The Enquiry and Contact pages include HTML form elements and JavaScript functionality.
+The Enquiry and Contact pages include HTML forms with JavaScript validation.
 
-The forms use validation to help ensure that visitors provide the required information.
+- Client-side validation checks the name, email address, product or message type, and message length.
+- Error messages are shown under each field and are cleared when the visitor corrects the field.
+- Forms are submitted asynchronously (AJAX) using EmailJS, so the page does not reload.
+- The business receives a notification email and the visitor receives a confirmation email.
+- The Enquiry form shows the price and stock availability of the chosen product in the confirmation pop-up.
+- The Contact form allows visitors to choose a message type and gives the option to copy the message or open an email application.
 
-The Contact page allows visitors to select a message type and prepare their message for the business's email address.
+### Testing
 
-Testing
-
-The website was tested using Visual Studio Code and Live Preview.
+The website was tested using Visual Studio Code, Live Preview and the deployed GitHub Pages site.
 
 The following areas were checked:
 
 - Navigation links between pages.
-- Product images and information.
-- Product search and category filtering.
-- Product price sorting.
+- Product loading, images and information.
+- Product search, category filtering and price sorting.
 - Product image lightbox.
-- Enquiry form validation and pop-up.
-- Contact form validation and pop-up.
-- Google Maps embed.
+- Enquiry form validation, error messages, price and availability response, and pop-up.
+- Contact form validation, error messages and pop-up.
+- EmailJS emails sent (checked in the EmailJS Email History).
+- Leaflet map and store markers.
+- FAQ accordion.
 - Page layout at different screen sizes.
 
-Changelog
+## Changelog
 
-Part 1
+### Part 1
 
 - Created the initial HTML structure for the Luna Apparel website.
 - Created the Home, About Us, Products, Enquiries and Contact pages.
@@ -160,7 +169,7 @@ Part 1
 - Added product information, images and prices.
 - Added enquiry and contact forms.
 
-Part 2
+### Part 2
 
 - Added CSS styling to all website pages.
 - Created a consistent fashion-themed visual design.
@@ -174,34 +183,42 @@ Part 2
 - Fixed navigation and file-link issues based on feedback.
 - Updated the README with Part 2 information.
 
-Part 3
+### Part 3
 
-- Added JavaScript functionality for product searching.
-- Added product category filtering.
-- Added product price sorting.
+- Loaded the products dynamically with JavaScript.
+- Added product searching, category filtering and price sorting.
 - Added a product image lightbox.
-- Added enquiry form validation and a confirmation pop-up.
-- Added contact form validation and email preparation.
-- Added a Google Maps embed to the Contact page.
-- Improved SEO information across all five website pages.
+- Added stock status labels to the products.
+- Added JavaScript validation with inline error messages to the Enquiry and Contact forms.
+- Added a product dropdown and a price and availability response to the Enquiry form.
+- Added AJAX form submission using EmailJS, with notification and confirmation emails.
+- Replaced the Google Maps embed with a Leaflet map showing both stores.
+- Added an FAQ accordion to the About Us page.
+- Added CSS animations and transitions.
+- Improved SEO information across all five website pages, including the Products page meta tags and title.
+- Added social media links and local business structured data.
+- Fixed price and product name differences between the Home and Products pages.
+- Updated the Home page layout and image sizes.
 - Added descriptive image alternative text.
-- Created a "robots.txt" file.
-- Created a "sitemap.xml" file.
+- Created a `robots.txt` file.
+- Created a `sitemap.xml` file.
 - Updated the README to document Part 3 development.
 
-References
+## References
 
 The following resources were used for guidance during website development:
 
 - W3Schools: https://www.w3schools.com/
 - MDN Web Docs: https://developer.mozilla.org/
-- Google Maps: https://www.google.com/maps
+- Leaflet: https://leafletjs.com/
+- OpenStreetMap: https://www.openstreetmap.org/copyright
+- EmailJS Documentation: https://www.emailjs.com/docs/
 - GitHub Documentation: https://docs.github.com/
 - GitHub Pages: https://docs.github.com/en/pages
 
-Accessed: 2 November 2026.
+Accessed: November 2026.
 
-Website Hosting
+## Website Hosting
 
 The Luna Apparel website is hosted using GitHub Pages.
 
